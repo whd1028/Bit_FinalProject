@@ -1,8 +1,8 @@
-# InsertNewsSql.py
+# NewsSql.py
 
 from SqlCon import SqlCon
 
-class InsertNewsSql:
+class NewsSql:
 
     # 언론사 넣기
     def insertPress(news):

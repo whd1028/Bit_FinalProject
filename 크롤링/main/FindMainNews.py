@@ -3,7 +3,7 @@ import datetime
 from datetime import date, timedelta
 from WebRobot import WebRobot
 from WebPage import WebPage
-from InsertNewsSql import InsertNewsSql
+from NewsSql import NewsSql
 
 class FindMainNews:
     def __init__(self, title, content, time, link, pic_link, press, p_id, cd_id):
@@ -142,9 +142,9 @@ class FindMainNews:
                                     news = FindMainNews.Extract(link, cat_no[5:8], cat_no[14:17])
                                     #news = FindMainNews()
 
-                                    InsertNewsSql.insertPress(news)
-                                    InsertNewsSql.insertMainNews(news)
-                                    InsertNewsSql.insertDescNews(news)
+                                    NewsSql.insertPress(news)
+                                    NewsSql.insertMainNews(news)
+                                    NewsSql.insertDescNews(news)
 
                                     
 

@@ -1,8 +1,8 @@
-# InsertPress.py
+# PressSql.py
 
 from SqlCon import SqlCon
 
-class InsertPress:
+class PressSql:
     def insertPress(press):
         try:
             for i in range(len(press.press_num)):

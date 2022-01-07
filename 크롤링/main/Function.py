@@ -3,14 +3,14 @@
 from FindMainNews import FindMainNews
 from FindNewsCat import FindNewsCat
 from FindPress import FindPress
-from InsertPress import InsertPress
+from PressSql import PressSql
 
 class Function():
 
     def Press():
         # 언론사 테이블 넣기
-        press = FindPress.findPress()
-        InsertPress.insertPress(press)
+        press = PressSql.findPress()
+        PressSql.insertPress(press)
 
     def News():
         # 뉴스 테이블 넣기
