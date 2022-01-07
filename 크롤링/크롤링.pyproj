@@ -1,0 +1,117 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>4cc6954d-f89e-423f-8f70-a3f15bf919a1</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>test14 - DB연결\main.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>크롤링</Name>
+    <RootNamespace>크롤링</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="EHHelper.py" />
+    <Compile Include="SqlCon.py" />
+    <Compile Include="test01 - Copy.py" />
+    <Compile Include="test01.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test02_한겨래.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test05_auto_test2.py" />
+    <Compile Include="test04_auto_test.py" />
+    <Compile Include="test03_뉴스페이지에서 원하는 값 추출.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CandidateSql.py" />
+    <Compile Include="test06_a_tag.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test07_맨끝페이지-수정테스트.py" />
+    <Compile Include="test08_맨끝페이지 매소드로 만들기.py" />
+    <Compile Include="test07_맨끝페이지.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test09_날짜값 가져오는 메소드.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test10\test10_Class_FindMainNews.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test14 - DB연결\CandidateSql.py" />
+    <Compile Include="test14 - DB연결\EHHelper.py" />
+    <Compile Include="test14 - DB연결\FindMainNews.py" />
+    <Compile Include="test14 - DB연결\FindNewsCat.py" />
+    <Compile Include="test14 - DB연결\InsertNewsSql.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test14 - DB연결\main.py" />
+    <Compile Include="test14 - DB연결\SqlCon.py" />
+    <Compile Include="test14 - DB연결\WebPage.py" />
+    <Compile Include="test14 - DB연결\WebPageSql.py" />
+    <Compile Include="test14 - DB연결\WebRobot.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\CandidateSql.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\EHHelper.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\FindMainNews.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\FindNewsCat.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\main.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\SqlCon.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\WebPage.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\WebPageSql.py" />
+    <Compile Include="test13 - 2010년부터 긁어오기\WebRobot.py" />
+    <Compile Include="test12 - 생성자 추가\CandidateSql.py" />
+    <Compile Include="test12 - 생성자 추가\EHHelper.py" />
+    <Compile Include="test12 - 생성자 추가\FindMainNews.py" />
+    <Compile Include="test12 - 생성자 추가\FindNewsCat.py" />
+    <Compile Include="test12 - 생성자 추가\main.py" />
+    <Compile Include="test12 - 생성자 추가\WebPage.py" />
+    <Compile Include="test12 - 생성자 추가\WebPageSql.py" />
+    <Compile Include="test12 - 생성자 추가\WebRobot.py" />
+    <Compile Include="test11 - 모두 모으기\CandidateSql.py" />
+    <Compile Include="test11 - 모두 모으기\EHHelper.py" />
+    <Compile Include="test11 - 모두 모으기\main.py" />
+    <Compile Include="test10\test10_date_page_main.py" />
+    <Compile Include="test11 - 모두 모으기\FindNewsCat.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test11 - 모두 모으기\FindMainNews.py" />
+    <Compile Include="test11 - 모두 모으기\WebPage.py" />
+    <Compile Include="test11 - 모두 모으기\WebPageSql.py" />
+    <Compile Include="test11 - 모두 모으기\WebRobot.py" />
+    <Compile Include="test14_time_test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebPage.py" />
+    <Compile Include="WebPageSql.py" />
+    <Compile Include="WebRobot.py" />
+    <Compile Include="크롤링.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="test14 - DB연결\" />
+    <Folder Include="test13 - 2010년부터 긁어오기\" />
+    <Folder Include="test12 - 생성자 추가\" />
+    <Folder Include="test11 - 모두 모으기\" />
+    <Folder Include="test10\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
