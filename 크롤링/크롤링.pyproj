@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4cc6954d-f89e-423f-8f70-a3f15bf919a1</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test14 - DB연결\main.py</StartupFile>
+    <StartupFile>test15_언론사 따오기.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -91,6 +91,9 @@
     <Compile Include="test11 - 모두 모으기\WebPageSql.py" />
     <Compile Include="test11 - 모두 모으기\WebRobot.py" />
     <Compile Include="test14_time_test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test15_언론사 따오기.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WebPage.py" />
