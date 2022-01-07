@@ -9,7 +9,7 @@ class Function():
 
     def Press():
         # 언론사 테이블 넣기
-        press = PressSql.findPress()
+        press = FindPress.findPress()
         PressSql.insertPress(press)
 
     def News():

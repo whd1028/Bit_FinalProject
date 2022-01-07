@@ -18,3 +18,15 @@ class PressSql:
             False
         else:
             True
+
+    def findPressNumber(news):
+        cursor = SqlCon.Cursor()
+        query = str.format("select p_id from Press where (p_name='{0}')", news.press)
+        try: 
+            cursor.execute(query)
+            row = cursor.fetchone()     # 검색 결과 중에 하나의 Row를 fetch하시오.
+            SqlCon.Commit()
+        except:
+            return None
+        else:
+            return row[0]

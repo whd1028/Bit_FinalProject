@@ -1,27 +1,17 @@
 # NewsSql.py
 
 from SqlCon import SqlCon
+from PressSql import PressSql
 
 class NewsSql:
+    # news의 변수 : title, content, time, link, pic_link, press, p_id, cd_id
 
-    # 언론사 넣기
-    def insertPress(news):
+    # News 테이블 내용 넣기
+    def insertNews(news):
         cursor = SqlCon.Cursor()
-        query = str.format("insert into Press (p_name) values('{0}')", news.press)
-
-        try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
-            cursor.execute(query)
-            SqlCon.Commit()
-        except:
-            False
-        else:
-            True
-
-    # 뉴스 핵심 내용 넣기
-    def insertMainNews(news):
-        cursor = SqlCon.Cursor()
+        pressid = PressSql.findPressNumber(news)
         # 언론사 번호를 어떻게 넣냐
-        query = str.format("insert into news (p_id, cd_id, n_title, n_input) values({0}, {1}, '{2}', '{3}')", news.cd_id, news.p_id, news.title, news.time)
+        query = str.format("insert into News (p_id, cd_id, n_title, nd_img, n_input, o_link) values({0}, {1}, '{2}', '{3}', '{4}', '{5}')", pressid, news.p_id, news.title, news.pic_link, news.time, news.link)
 
         try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
             cursor.execute(query)
@@ -30,11 +20,25 @@ class NewsSql:
             False
         else:
             True
+
+    # News 테이블 n_id 얻기
+    def findnidNumber(news):
+        cursor = SqlCon.Cursor()
+        query = str.format("select n_id from News where (o_link='{0}')", news.link)
+        try: 
+            cursor.execute(query)
+            row = cursor.fetchone()     # 검색 결과 중에 하나의 Row를 fetch하시오.
+            SqlCon.Commit()
+        except:
+            return None
+        else:
+            return row[0]
 
     # 뉴스 내용 넣기
     def insertDescNews(news):
         cursor = SqlCon.Cursor()
-        query = str.format("insert into news_detail (nd_description, nd_img) values('{0}', '{1}')", news.content, news.pic_link)
+        nid = NewsSql.findnidNumber(news)
+        query = str.format("insert into N_content (n_id, n_content) values({0}, '{1}')", nid, news.content)
 
         try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
             cursor.execute(query)

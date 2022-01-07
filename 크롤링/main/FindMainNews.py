@@ -140,10 +140,10 @@ class FindMainNews:
                                 links.append(link)
                                 try:
                                     news = FindMainNews.Extract(link, cat_no[5:8], cat_no[14:17])
-                                    #news = FindMainNews()
 
-                                    NewsSql.insertPress(news)
-                                    NewsSql.insertMainNews(news)
+                                    # 뉴스 세부 내용 저장
+                                    NewsSql.insertNews(news)
+                                    # 뉴스 본문 저장
                                     NewsSql.insertDescNews(news)
 
                                     

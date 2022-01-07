@@ -26,7 +26,7 @@
     <Compile Include="main\Function.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="main\InsertPress.py">
+    <Compile Include="main\PressSql.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlCon.py" />
@@ -61,7 +61,7 @@
     <Compile Include="main\EHHelper.py" />
     <Compile Include="main\FindMainNews.py" />
     <Compile Include="main\FindNewsCat.py" />
-    <Compile Include="main\InsertNewsSql.py" />
+    <Compile Include="main\NewsSql.py" />
     <Compile Include="main\main.py" />
     <Compile Include="main\SqlCon.py" />
     <Compile Include="main\WebPage.py" />
