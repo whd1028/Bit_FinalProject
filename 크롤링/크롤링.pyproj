@@ -23,6 +23,9 @@
   <ItemGroup>
     <Compile Include="EHHelper.py" />
     <Compile Include="main\FindPress.py" />
+    <Compile Include="main\Function.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main\InsertPress.py">
       <SubType>Code</SubType>
     </Compile>
