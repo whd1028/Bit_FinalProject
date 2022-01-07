@@ -2,7 +2,6 @@
 import datetime 
 from datetime import date, timedelta
 from WebRobot import WebRobot
-from WebPage import WebPage
 from NewsSql import NewsSql
 
 class FindMainNews:
@@ -99,20 +98,17 @@ class FindMainNews:
     # 링크 타고 들어가기
     # input url 형식
     # url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
-    def NewsInsert(url, t, cat_no):
+    def NewsInsert(url, select, countdays, cat_no):
         i = 0
         inputurl = url
-        #getTime = FindMainNews.GetTime(t)   # 오늘로부터 t일 가져오기
-        getTime = FindMainNews.GetTime_Since2010()  # 2010년부터 오늘까지 다가져오기
+        if select == 1:
+            getTime = FindMainNews.GetTime_Since2010()  # 2010년부터 오늘까지 다가져오기
+        elif select == 2:
+            getTime = FindMainNews.GetTime(countdays)   # 오늘로부터 countdays일 가져오기
         links = []            # 반환할 리스트
         for gt in getTime:
-            ################################################
-            print(gt)
             d_url = inputurl + gt + "&page="
             
-            ##################################################
-            print(d_url)
-    
             # 마지막 페이지 찾기
             lastUrl = FindMainNews.FindLastPage(d_url)
 
@@ -147,8 +143,8 @@ class FindMainNews:
                                     NewsSql.insertDescNews(news)
 
                                     
-
                                     print("제목 :", news.title)
+                                    """
                                     print("내용 :", news.content)
                                     print("날짜 :", news.time)
                                     print("원문 링크 :", news.link)
@@ -156,7 +152,7 @@ class FindMainNews:
                                     print("언론사 :", news.press)
                                     print("해당 카테고리 : ", cat_no[14:17])
                                     print("해당 세부 카테고리 : ", cat_no[5:8])
-
+                                    """
                                 except:
                                     continue
         return links

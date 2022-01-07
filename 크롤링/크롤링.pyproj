@@ -57,7 +57,6 @@
     <Compile Include="test10\test10_Class_FindMainNews.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="main\CandidateSql.py" />
     <Compile Include="main\EHHelper.py" />
     <Compile Include="main\FindMainNews.py" />
     <Compile Include="main\FindNewsCat.py" />
@@ -65,7 +64,6 @@
     <Compile Include="main\main.py" />
     <Compile Include="main\SqlCon.py" />
     <Compile Include="main\WebPage.py" />
-    <Compile Include="main\WebPageSql.py" />
     <Compile Include="main\WebRobot.py" />
     <Compile Include="test14 - DB연결\CandidateSql.py" />
     <Compile Include="test14 - DB연결\EHHelper.py" />

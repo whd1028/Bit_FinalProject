@@ -2,9 +2,7 @@
 
 import urllib.request as ureq
 from bs4 import BeautifulSoup
-from CandidateSql import CandidateSql
 from WebPage import WebPage
-from WebPageSql import WebPageSql
 import threading
 
 class WebRobot:
@@ -39,43 +37,3 @@ class WebRobot:
             return None
         else :                              # 파싱 성공했을 때
             return html
-
-
-    # 주기적으로 수집하는 메소드
-    # period : 수집주기
-    # tm_callback : 수집하였을 때 이를 통보 받을 이벤트 핸들러
-    @staticmethod
-    def CollectTM(period, tm_callback):     # 주기적으로 수집이 되었는지 알고싶을 때 tm_callback을 돌려주면 된다
-        # 수집후보 사이트 얻어오기
-        url,depth = CandidateSql.GetCandidate()
-
-        # 주기적인 타이머 객체 생성
-        timer = threading.Timer(period, WebRobot.CollectTM, [period, tm_callback])
-        # 타이머 가동 (수집하는 페이지에 에러가 뜬 경우에도 다른 페이지를 수집하기 위해 타이머 먼저 실행)
-        timer.start()
-
-        if url == "":                       # 수집 후보 사이트가 없을 때 종료
-            return
-
-        # 웹페이지 수집하기
-        res = WebRobot.CollectHtml(url)
-        if res == None:                     # 웹 페이지 수집 실패했을 때 종료
-            return
-
-        # 수집한 정보로 WebPage 객체를 생성
-        wp = WebPage.MakeWebPage(url, res)
-        if wp == None:                      # WebPage 객체 생성 실패했을 때 종료
-            # 버그 상황을 로그 파일에 레포팅을 하고 싶을 때 여기에 작성 가능
-            return
-
-        # DB에 수집한 WebPage 정보를 기록
-        WebPageSql.AddPage(wp)
-
-        # 수집한 웹 페이지에 있는 링크 각각에 대하여
-        for link in wp.links:
-            # 수집 후보 사이트로 등록(depth는 현재 depth)
-            CandidateSql.AddCandidate(link,depth+1)     # 시드 사이트보다 뎁스 1 증가시키며 저장하기 => 안으로 들어가며 처리
-
-
-        if tm_callback != None:                     # 이벤트 핸들러가 있을 때
-            tm_callback(url,depth,wp)               # 이벤트 통보(개시)
