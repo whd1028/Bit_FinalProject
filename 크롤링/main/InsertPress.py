@@ -3,4 +3,18 @@
 from SqlCon import SqlCon
 
 class InsertPress:
+    def insertPress(press):
+        try:
+            for i in range(len(press.press_num)):
+                cursor = SqlCon.Cursor()
+                query = str.format("insert into Press (p_id, p_name) values({0}, '{1}')", press.press_num[i], press.press_name[i])
 
+                try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
+                    cursor.execute(query)
+                    SqlCon.Commit()
+                except:
+                    continue
+        except:
+            False
+        else:
+            True

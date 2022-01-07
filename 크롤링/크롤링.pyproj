@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4cc6954d-f89e-423f-8f70-a3f15bf919a1</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test15_언론사 따오기.py</StartupFile>
+    <StartupFile>main\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EHHelper.py" />
+    <Compile Include="main\FindPress.py" />
+    <Compile Include="main\InsertPress.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SqlCon.py" />
     <Compile Include="test01 - Copy.py" />
     <Compile Include="test01.py">
@@ -50,6 +54,16 @@
     <Compile Include="test10\test10_Class_FindMainNews.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="main\CandidateSql.py" />
+    <Compile Include="main\EHHelper.py" />
+    <Compile Include="main\FindMainNews.py" />
+    <Compile Include="main\FindNewsCat.py" />
+    <Compile Include="main\InsertNewsSql.py" />
+    <Compile Include="main\main.py" />
+    <Compile Include="main\SqlCon.py" />
+    <Compile Include="main\WebPage.py" />
+    <Compile Include="main\WebPageSql.py" />
+    <Compile Include="main\WebRobot.py" />
     <Compile Include="test14 - DB연결\CandidateSql.py" />
     <Compile Include="test14 - DB연결\EHHelper.py" />
     <Compile Include="test14 - DB연결\FindMainNews.py" />
@@ -102,6 +116,7 @@
     <Compile Include="크롤링.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="main\" />
     <Folder Include="test14 - DB연결\" />
     <Folder Include="test13 - 2010년부터 긁어오기\" />
     <Folder Include="test12 - 생성자 추가\" />
