@@ -22,3 +22,6 @@ class FindNewsCat:
         for n in range(len(eco_sids)):
             sidurls.append(url+eco_sids[n]+'&mid=shm&date=')
         return sidurls, eco_sids    # 카테고리 주소와 카테고리 번호 리턴
+
+    def FindNewsCat():
+        url = 
