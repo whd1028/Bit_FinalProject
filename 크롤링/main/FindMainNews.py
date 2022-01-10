@@ -106,7 +106,7 @@ class FindMainNews:
         elif select == 2:
             getTime = FindMainNews.GetTime(countdays)   # 오늘로부터 countdays일 가져오기
         links = []            # 반환할 리스트
-        for gt in getTime:
+        for gt in getTime:                              # 시간 리스트 수만큼 for 문 돌리기
             d_url = inputurl + gt + "&page="
             
             # 마지막 페이지 찾기
@@ -131,9 +131,11 @@ class FindMainNews:
                             # continue 사용 이유 : href가 없어 예외가 발생된 경우에도 뒤에 있는 하이퍼링크들도 조사를 해야하기 때문에 continue를 사용한다.
                             continue        
                         else:
-                            # 경제만 추출(sid1=101)
+                            # 경제만 추출(sid1=101)      => 수정 필요
                             if link.startswith('https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101') or link.startswith('http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101'):
                                 links.append(link)
+
+                                # 아래 부분 따로 빼기
                                 try:
                                     news = FindMainNews.Extract(link, cat_no[5:8], cat_no[14:17])
 

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4cc6954d-f89e-423f-8f70-a3f15bf919a1</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>main\main.py</StartupFile>
+    <StartupFile>test11 - 모두 모으기\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EHHelper.py" />
+    <Compile Include="main\CategorySql.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main\FindPress.py" />
     <Compile Include="main\Function.py">
       <SubType>Code</SubType>

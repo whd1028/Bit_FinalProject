@@ -17,7 +17,7 @@ class Function():
         print("2. 오늘 날짜부터 넣기")
         select = input("번호를 입력해주세요")
         if int(select) == 1:
-            when = 0
+            countdays = 0
         elif int(select) == 2:
             countdays = int(input("며칠 전까지 가져올까요? "))
         else:

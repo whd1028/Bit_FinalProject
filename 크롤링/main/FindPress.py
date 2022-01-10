@@ -3,7 +3,6 @@
 import urllib.request as ureq
 from bs4 import BeautifulSoup
 from WebPage import WebPage
-from CandidateSql import CandidateSql
 from WebRobot import WebRobot
 from EHHelper import EHHelper
 
