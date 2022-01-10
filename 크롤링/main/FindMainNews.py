@@ -95,7 +95,7 @@ class FindMainNews:
     # input url 형식
     # url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
     @staticmethod
-    def NewsInsert(url, select, countdays, sid1):
+    def findNewsUrl(url, select, countdays, sid1):
         inputurl = url
         if select == 1:
             getTime = FindMainNews.GetTime_Since2010()  # 2010년부터 오늘까지 다가져오기

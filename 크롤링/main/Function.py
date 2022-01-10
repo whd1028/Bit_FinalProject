@@ -10,13 +10,13 @@ from NewsExtract import NewsExtract
 class Function():
 
     @staticmethod
-    def Press():
+    def press():
         # 언론사 테이블 넣기
         press = FindPress.findPress()
         PressSql.insertPress(press)
 
     @staticmethod
-    def News():
+    def news():
         print("1. 2010년 1월 1일부터 넣기")
         print("2. 오늘 날짜부터 넣기")
         select = input("번호를 입력해주세요 : ")
@@ -38,11 +38,11 @@ class Function():
             sid2 = cat_no[cu][5:8]
 
             # 완성된 뉴스 url로 만들기
-            newsurls = FindMainNews.NewsInsert(cat_urls[cu], int(select), countdays, sid1)   # 인자는 url과 오늘로부터 며칠 전꺼까지 가져올 것인지 설정
+            newsurls = FindMainNews.findNewsUrl(cat_urls[cu], int(select), countdays, sid1)   # 인자는 url과 오늘로부터 며칠 전꺼까지 가져올 것인지 설정
 
             for newsurl in newsurls:
                 try:
-                    news = NewsExtract.Extract(newsurl, sid2, sid1)    # url과 sid2 sid1를 인자로 넣음
+                    news = NewsExtract.extract(newsurl, sid2, sid1)    # url과 sid2 sid1를 인자로 넣음
 
                     # 뉴스 세부 내용 저장
                     NewsSql.insertNews(news)
