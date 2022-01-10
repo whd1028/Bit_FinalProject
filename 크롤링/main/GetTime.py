@@ -14,10 +14,10 @@ class GetTime():
             date_list.append(temp)
         return date_list 
 
-    # 2010년부터 가져오기
+    # 2019년부터 가져오기
     @staticmethod
-    def getTime_Since2010() : # 나오게할 날짜 갯수
-        baseDate = datetime.date(2010, 1, 1)
+    def getTime_Past() : # 나오게할 날짜 갯수
+        baseDate = datetime.date(2019, 1, 1)
         d_day = datetime.date.today() - baseDate
         d_day = int(str(d_day)[0:4])
         d_list = [baseDate + datetime.timedelta(days=x) for x in range(d_day)]

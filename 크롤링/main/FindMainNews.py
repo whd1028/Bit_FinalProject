@@ -66,7 +66,7 @@ class FindMainNews:
     @staticmethod
     def findAndInsertPastNewsUrl(url, sid1, sid2):
         inputurl = url
-        getTime = GetTime.getTime_Since2010()  # 2010년부터 오늘까지 다가져오기
+        getTime = GetTime.getTime_Past()  # 2010년부터 오늘까지 다가져오기
         for gt in getTime:                              # 시간 리스트 수만큼 for 문 돌리기
             print("날짜 :", gt)
             d_url = inputurl + gt + "&page="
