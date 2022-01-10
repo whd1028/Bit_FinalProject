@@ -26,7 +26,7 @@ class NewsExtract():
             except:
                 tags_pic_link = 'None'
             finally:
-                # 언론사 추출
+                # 언론사 이름 추출
                 tags_media = res.select('#main_content > div.article_header > div.press_logo > a > img')[0]['alt']
 
                 # 제목 추출
@@ -64,18 +64,26 @@ class NewsExtract():
                 # 사진 추출
                 pic_link = tags_pic_link.strip()
 
-                # 언론사 추출
+                # 언론사 이름 추출
                 press = tags_media.strip()
 
-                return Article(title, content, time, link, pic_link, press, cd_id, c_id)
+                # 언론사 번호 추출
+                if len(url) == 97:                  # LS2D인 경우
+                    press_no = int(url[79:82])
+                elif len(url) == 96:                # LS1D인 경우
+                    press_no = int(url[78:81])
+                else:
+                    press_no = 0
+
+                return Article(title, content, time, link, pic_link, press, press_no, cd_id, c_id)
 
         except:
             return False
 
 
 # a1 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=277&aid=0005027945", 100,100)
-# a2 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=018&aid=0005123091", 100,100)
 # a3 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=025&aid=0003165201", 100,100)
+# a2 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=018&aid=0005123091", 100,100)
 # a4 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=277&aid=0005027916", 100,100)
 # print("오전1자리",a1.time)
 # print("오전2자리",a2.time)
