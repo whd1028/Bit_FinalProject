@@ -65,17 +65,17 @@ class NewsExtract():
                 pic_link = tags_pic_link.strip()
 
                 # 언론사 이름 추출
-                press = tags_media.strip()
+                press_name = tags_media.strip()
 
                 # 언론사 번호 추출
                 if len(url) == 97:                  # LS2D인 경우
-                    press_no = int(url[79:82])
+                    press_num = int(url[79:82])
                 elif len(url) == 96:                # LS1D인 경우
-                    press_no = int(url[78:81])
+                    press_num = int(url[78:81])
                 else:
-                    press_no = 0
+                    press_num = 0
 
-                return Article(title, content, time, link, pic_link, press, press_no, cd_id, c_id)
+                return Article(title, content, time, link, pic_link, press_name, press_num, cd_id, c_id)
 
         except:
             return False
