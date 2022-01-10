@@ -5,16 +5,6 @@ from WebRobot import WebRobot
 from NewsSql import NewsSql
 
 class FindMainNews:
-    def __init__(self, title, content, time, link, pic_link, press, cd_id, c_id):
-        self.title = title[0]
-        self.content = content[0]
-        self.time = time
-        self.link = link[0]
-        self.pic_link = pic_link[0]
-        self.press = press[0]
-        self.cd_id = cd_id
-        self.c_id = c_id
-
 
     # 시간 처리해서 가져오기
     @staticmethod
@@ -51,43 +41,46 @@ class FindMainNews:
         pn = 1
         # 마지막 페이지까지 반복문 돌리기
         while(True):
-            total_url = url+str(pn)
-            # 사이트
-            res = WebRobot.CollectHtml(total_url)
-            # 페이징 추출
-            tags_page = res.select('#main_content > div.paging')
-
-            # 페이징 담을 리스트
-            p_num = []
-
-            # 페이징 넘버 추출
-            for tag_page in tags_page:
-                temp = tag_page.text.strip()
-
-            # 개행으로 구분된 페이징 스플릿하여 리스트 저장
-            temp = temp.split("\n")
-
-            # 이전 버튼이 존재 여부 테스트
             try:
-                int(temp[0])
+                total_url = url+str(pn)
+                # 사이트
+                res = WebRobot.CollectHtml(total_url)
+                # 페이징 추출
+                tags_page = res.select('#main_content > div.paging')
 
-            # 이전 버튼이 있는 경우
+                # 페이징 담을 리스트
+                p_num = []
+
+                # 페이징 넘버 추출
+                for tag_page in tags_page:
+                    temp = tag_page.text.strip()
+
+                # 개행으로 구분된 페이징 스플릿하여 리스트 저장
+                temp = temp.split("\n")
+
+                # 이전 버튼이 존재 여부 테스트
+                try:
+                    int(temp[0])
+
+                # 이전 버튼이 있는 경우
+                except:
+                    if len(temp) == 12:       # 이전과 다음이 있는 페이지
+                        pn = int(temp[10])+1
+                        continue
+                    else:
+                        # 이전과 다음이 없는 경우 멈춤
+                        break
+
+                # 이전 버튼이 없는 경우
+                else:
+                    if len(temp) == 11:         # 다음만 있는 페이지
+                        pn = int(temp[9])+1
+                        continue
+                    else:
+                        # 다음이 없는 경우 멈춤
+                        break
             except:
-                if len(temp) == 12:       # 이전과 다음이 있는 페이지
-                    pn = int(temp[10])+1
-                    continue
-                else:
-                    # 이전과 다음이 없는 경우 멈춤
-                    break
-
-            # 이전 버튼이 없는 경우
-            else:
-                if len(temp) == 11:         # 다음만 있는 페이지
-                    pn = int(temp[9])+1
-                    continue
-                else:
-                    # 다음이 없는 경우 멈춤
-                    break
+                return 1
 
         try:
             for i in range(len(temp)):
@@ -110,124 +103,40 @@ class FindMainNews:
             getTime = FindMainNews.GetTime(countdays)   # 오늘로부터 countdays일 가져오기
         links = []            # 반환할 리스트
         for gt in getTime:                              # 시간 리스트 수만큼 for 문 돌리기
+            print(gt)
             d_url = inputurl + gt + "&page="
             
             # 마지막 페이지 찾기
-            lastUrl = FindMainNews.FindLastPage(d_url)
+            try:
+                lastUrl = FindMainNews.FindLastPage(d_url)
 
-            # 마지막 페이지까지 추출하기
-            for ex in range(lastUrl):
-                ex = ex+1
-                url = d_url + str(ex)
-                # 웹페이지 수집하기
-                res = WebRobot.CollectHtml(url)
-                if res == None:                     # 웹 페이지 수집 실패했을 때 종료
-                    break
+                # 마지막 페이지까지 추출하기
+                for ex in range(lastUrl):
+                    ex = ex+1
+                    url = d_url + str(ex)
+                    # 웹페이지 수집하기
+                    res = WebRobot.CollectHtml(url)
+                    if res == None:                     # 웹 페이지 수집 실패했을 때 종료
+                        break
 
-                atags = res.find_all('a')
-                for atag in atags:
-                    # 다운로드 어트리뷰트가 있는지 확인 (파일을 다운로드 받는 태그가 아닐 때)
-                    if atag.has_attr('download') == False:
-                        try:
-                            link = atag['href']     # href의 있는 경우 링크를 얻어오기               
-                        except:
-                            # continue 사용 이유 : href가 없어 예외가 발생된 경우에도 뒤에 있는 하이퍼링크들도 조사를 해야하기 때문에 continue를 사용한다.
-                            continue        
-                        else:
-                            # 해당 sid만 추출 (sid1=101)     
-                            if link.startswith(f'https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}') or link.startswith(f'http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}'):
-                                links.append(link)
+                    atags = res.find_all('a')
+                    for atag in atags:
+                        # 다운로드 어트리뷰트가 있는지 확인 (파일을 다운로드 받는 태그가 아닐 때)
+                        if atag.has_attr('download') == False:
+                            try:
+                                link = atag['href']     # href의 있는 경우 링크를 얻어오기               
+                            except:
+                                # continue 사용 이유 : href가 없어 예외가 발생된 경우에도 뒤에 있는 하이퍼링크들도 조사를 해야하기 때문에 continue를 사용한다.
+                                continue        
+                            else:
+                                # 해당 sid만 추출 (sid1=101)     
+                                if link.startswith(f'https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}') or link.startswith(f'http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}'):
+                                    links.append(link)
+            except:
+                continue
         return links
 
 
-    # 원하는 항목 다 가져오기
-    # 완성된 기사 url을 input 사용
-    @staticmethod
-    def Extract(url, cd_id, c_id):
-        try :
-            # 기사 가져오기
-            res = WebRobot.CollectHtml(url)
-
-            # 제목 추출
-            tags_title = res.select('#articleTitle')
-            # 내용 추출
-            tags_content = res.select('#articleBodyContents')
-            # 날짜 추출
-            tags_time = res.select('#main_content > div.article_header > div.article_info > div > span:nth-child(1)')
-            # 원문 링크 추출
-            tags_link = res.select('#main_content > div.article_header > div.article_info > div > a:nth-of-type(1)')[0]['href'] 
-            # 사진 링크 추출
-            try:
-                tags_pic_link = res.select("#articleBodyContents > .end_photo_org > img")[0]['src']
-            except:
-                tags_pic_link = 'None'
-            finally:
-                # 언론사 추출
-                tags_media = res.select('#main_content > div.article_header > div.press_logo > a > img')[0]['alt']
 
 
-                # 빈 리스트 생성
-                title =[]
-                content = []
-                time_temp = []
-                link = []
-                pic_link = []
-                press = []
 
-                # 제목 추출
-                for tag_title in tags_title:
-                    title.append(tag_title.text.strip())
-
-                # 내용 추출
-                for tag_content in tags_content:
-                    temp_content = tag_content.text
-                    temp_content = temp_content.replace("\xa0", " ")
-                    temp_content = temp_content.replace("\n", "")
-                    temp_content = temp_content.replace("\t", " ")
-                    content.append(temp_content.strip())
-
-                # 날짜 추출
-                for tag_time in tags_time:
-                    time_temp.append(tag_time.text.strip())
-
-                # 날짜 오전 오후 처리
-                if time_temp[0][12:14] == "오후":
-                    # 1시부터 9시
-                    if len(time_temp[0]) == 19:
-                        time = time_temp[0][:12] + str(int(time_temp[0][15:16])+12) + time_temp[0][16:]
-                    # 10시부터 12시
-                    elif len(time_temp[0]) == 20:
-                        time = time_temp[0][:12] + str(int(time_temp[0][15:17])+12) + time_temp[0][17:]
-                elif time_temp[0][12:14] == "오전":
-                    # 1시부터 9시
-                    if len(time_temp[0]) == 19:
-                        time = time_temp[0][:12] + time_temp[0][15:]
-                    # 10시부터 12시
-                    elif len(time_temp[0]) == 20:
-                        time = time_temp[0][:12] + time_temp[0][15:]
-
-
-                # 원문 링크 추출
-                link.append(tags_link.strip())
-
-                # 사진 추출
-                pic_link.append(tags_pic_link.strip())
-
-                # 언론사 추출
-                press.append(tags_media.strip())
-
-
-                return FindMainNews(title, content, time, link, pic_link, press, cd_id, c_id)
-
-        except:
-            return False
-
-
-a1 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=277&aid=0005027945", 100,100)
-a2 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=018&aid=0005123091", 100,100)
-a3 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=025&aid=0003165201", 100,100)
-a4 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=277&aid=0005027916", 100,100)
-print("오전1자리",a1.time)
-print("오전2자리",a2.time)
-print("오후1자리",a3.time)
-print("오후2자리",a4.time)

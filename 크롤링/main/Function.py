@@ -5,6 +5,7 @@ from FindNewsCat import FindNewsCat
 from FindPress import FindPress
 from PressSql import PressSql
 from NewsSql import NewsSql
+from NewsExtract import NewsExtract
 
 class Function():
 
@@ -41,7 +42,7 @@ class Function():
 
             for newsurl in newsurls:
                 try:
-                    news = FindMainNews.Extract(newsurl, sid2, sid1)    # url과 sid2 sid1를 인자로 넣음
+                    news = NewsExtract.Extract(newsurl, sid2, sid1)    # url과 sid2 sid1를 인자로 넣음
 
                     # 뉴스 세부 내용 저장
                     NewsSql.insertNews(news)
