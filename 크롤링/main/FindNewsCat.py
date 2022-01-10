@@ -3,12 +3,6 @@
 # 경제 sid1=101
 # 금융 sid2=259
 # 증권 sid2=258
-# 산업/재계 sid2=261
-# 중기/벤처 sid2=771
-# 부동산 sid2=260
-# 글로벌 경제 sid2=262
-# 생활경제 sid2=310
-# 경제 일반 sid2=263
 
 # input url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
 

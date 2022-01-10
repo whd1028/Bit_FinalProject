@@ -2,6 +2,7 @@
 
 from SqlCon import SqlCon
 from PressSql import PressSql
+from Article import Article
 
 class NewsSql:
     # news의 변수 : title, content, time, link, pic_link, press, p_id, cd_id

@@ -2,7 +2,7 @@
 
 from WebRobot import WebRobot
 from Article import Article
-
+from NewsSql import NewsSql
 class NewsExtract():
     # 원하는 항목 다 가져오기
     # 완성된 기사 url을 input 사용
@@ -33,11 +33,15 @@ class NewsExtract():
                 title = tags_title[0].text.strip()
 
                 # 내용 추출
+                #print(tags_content[0].text)
                 temp_content = tags_content[0].text
                 temp_content = temp_content.replace("\xa0", " ")
                 temp_content = temp_content.replace("\n", "")
                 temp_content = temp_content.replace("\t", " ")
+                temp_content = temp_content.replace("\'", "\\\'")
+                temp_content = temp_content.replace("\"", "\\\"")
                 content = temp_content.strip()
+                print(content)
 
                 # 날짜 추출
                 time_temp = tags_time[0].text.strip()
@@ -68,9 +72,9 @@ class NewsExtract():
                 press_name = tags_media.strip()
 
                 # 언론사 번호 추출
-                if len(url) == 97:                  # LS2D인 경우
+                if url[44:].startswith('LS2D'):             # LS2D인 경우
                     press_num = int(url[79:82])
-                elif len(url) == 96:                # LS1D인 경우
+                elif url[44:].startswith('LSD'):            # LSD인 경우
                     press_num = int(url[78:81])
                 else:
                     press_num = 0
@@ -81,7 +85,8 @@ class NewsExtract():
             return False
 
 
-# a1 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=277&aid=0005027945", 100,100)
+#a1 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LPOD&mid=sec&oid=009&aid=0004906767", 226,105)
+#NewsSql.insertDescNews(a1)
 # a3 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=025&aid=0003165201", 100,100)
 # a2 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=018&aid=0005123091", 100,100)
 # a4 = NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=277&aid=0005027916", 100,100)
@@ -89,3 +94,5 @@ class NewsExtract():
 # print("오전2자리",a2.time)
 # print("오후1자리",a3.time)
 # print("오후2자리",a4.time)
+
+#NewsExtract.extract("https://news.naver.com/main/read.naver?mode=LPOD&mid=sec&oid=009&aid=0004906767", 100,100)
