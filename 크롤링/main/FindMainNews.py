@@ -1,37 +1,10 @@
 # FindMainNews.py
-import datetime 
-from datetime import date, timedelta
 from WebRobot import WebRobot
+from GetTime import GetTime
+from NewsExtract import NewsExtract
 from NewsSql import NewsSql
 
 class FindMainNews:
-
-    # 시간 처리해서 가져오기
-    @staticmethod
-    def GetTime(numdays) : # 나오게할 날짜 갯수
-        baseDate = datetime.date.today() 
-        d_list = [baseDate - datetime.timedelta(days=x) for x in range(numdays)]
-        print("baseDate: ", baseDate) 
-        date_list = []
-        for date in d_list : 
-            temp = date.strftime("%Y%m%d")
-            date_list.append(temp)
-        return date_list 
-
-    # 2010년부터 가져오기
-    @staticmethod
-    def GetTime_Since2010() : # 나오게할 날짜 갯수
-        baseDate = datetime.date(2010, 1, 1)
-        d_day = datetime.date.today() - baseDate
-        d_day = int(str(d_day)[0:4])
-        d_list = [baseDate + datetime.timedelta(days=x) for x in range(d_day)]
-        print("baseDate: ", baseDate) 
-        date_list = []
-        for date in d_list : 
-            temp = date.strftime("%Y%m%d")
-            date_list.append(temp)
-        return date_list 
-
     # 날짜가 포함된 url을 넣어 마지막 페이지 찾기
     # input url 형식
     # url = "https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=20220105&page="
@@ -47,9 +20,6 @@ class FindMainNews:
                 res = WebRobot.CollectHtml(total_url)
                 # 페이징 추출
                 tags_page = res.select('#main_content > div.paging')
-
-                # 페이징 담을 리스트
-                p_num = []
 
                 # 페이징 넘버 추출
                 for tag_page in tags_page:
@@ -91,19 +61,14 @@ class FindMainNews:
             return pn
                     
 
-    # 링크 타고 들어가 열 링크 리턴
     # input url 형식
     # url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
     @staticmethod
-    def findNewsUrl(url, select, countdays, sid1):
+    def findAndInsertPastNewsUrl(url, sid1, sid2):
         inputurl = url
-        if select == 1:
-            getTime = FindMainNews.GetTime_Since2010()  # 2010년부터 오늘까지 다가져오기
-        elif select == 2:
-            getTime = FindMainNews.GetTime(countdays)   # 오늘로부터 countdays일 가져오기
-        links = []            # 반환할 리스트
+        getTime = GetTime.getTime_Since2010()  # 2010년부터 오늘까지 다가져오기
         for gt in getTime:                              # 시간 리스트 수만큼 for 문 돌리기
-            print(gt)
+            print("날짜 :", gt)
             d_url = inputurl + gt + "&page="
             
             # 마지막 페이지 찾기
@@ -111,8 +76,7 @@ class FindMainNews:
                 lastUrl = FindMainNews.FindLastPage(d_url)
 
                 # 마지막 페이지까지 추출하기
-                for ex in range(lastUrl):
-                    ex = ex+1
+                for ex in range(1, lastUrl+1):
                     url = d_url + str(ex)
                     # 웹페이지 수집하기
                     res = WebRobot.CollectHtml(url)
@@ -131,10 +95,78 @@ class FindMainNews:
                             else:
                                 # 해당 sid만 추출 (sid1=101)     
                                 if link.startswith(f'https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}') or link.startswith(f'http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}'):
-                                    links.append(link)
+                                    # links.append(link)
+
+                                    # 추출한 url의 내용을 추출하여 db에 넣기
+                                    try:
+                                        # url과 sid2 sid1를 인자로 넣어 extract 수행
+                                        news = NewsExtract.extract(link, sid2, sid1)    
+
+                                        # 뉴스 세부 내용 저장
+                                        NewsSql.insertNews(news)
+                                        # 뉴스 본문 저장
+                                        NewsSql.insertDescNews(news)
+
+                                        print("제목 :", news.title)
+                                    except:
+                                        continue
             except:
                 continue
-        return links
+        return True
+
+
+    # 링크 타고 들어가 열 링크 리턴
+    # input url 형식
+    # url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
+    @staticmethod
+    def findAndInsertPresentNewsUrl(url, sid1, sid2, countdays):
+        inputurl = url
+        getTime = GetTime.getTime(countdays)   # 오늘로부터 countdays일 가져오기
+
+        for gt in getTime:                              # 시간 리스트 수만큼 for 문 돌리기
+            print("날짜 :", gt)
+            d_url = inputurl + gt + "&page="
+            
+            # 마지막 페이지 찾기
+            try:
+                lastUrl = FindMainNews.FindLastPage(d_url)
+
+                # 마지막 페이지까지 추출하기
+                for ex in range(1, lastUrl+1):
+                    url = d_url + str(ex)
+                    # 웹페이지 수집하기
+                    res = WebRobot.CollectHtml(url)
+                    if res == None:                     # 웹 페이지 수집 실패했을 때 종료
+                        break
+
+                    atags = res.find_all('a')
+                    for atag in atags:
+                        # 다운로드 어트리뷰트가 있는지 확인 (파일을 다운로드 받는 태그가 아닐 때)
+                        if atag.has_attr('download') == False:
+                            try:
+                                link = atag['href']     # href의 있는 경우 링크를 얻어오기               
+                            except:
+                                # continue 사용 이유 : href가 없어 예외가 발생된 경우에도 뒤에 있는 하이퍼링크들도 조사를 해야하기 때문에 continue를 사용한다.
+                                continue        
+                            else:
+                                # 해당 sid만 추출 (sid1=101)     
+                                if link.startswith(f'https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}') or link.startswith(f'http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}'):
+                                    # 추출한 url의 내용을 추출하여 db에 넣기
+                                    try:
+                                        # url과 sid2 sid1를 인자로 넣어 extract 수행
+                                        news = NewsExtract.extract(link, sid2, sid1)    
+
+                                        # 뉴스 세부 내용 저장
+                                        NewsSql.insertNews(news)
+                                        # 뉴스 본문 저장
+                                        NewsSql.insertDescNews(news)
+
+                                        print("제목 :", news.title)
+                                    except:
+                                        continue
+            except:
+                continue
+        return True
 
 
 
