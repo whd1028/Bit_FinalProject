@@ -5,18 +5,19 @@ from WebRobot import WebRobot
 from NewsSql import NewsSql
 
 class FindMainNews:
-    def __init__(self, title, content, time, link, pic_link, press, p_id, cd_id):
+    def __init__(self, title, content, time, link, pic_link, press, cd_id, c_id):
         self.title = title[0]
         self.content = content[0]
-        self.time = time[0]
+        self.time = time
         self.link = link[0]
         self.pic_link = pic_link[0]
         self.press = press[0]
-        self.p_id = p_id
         self.cd_id = cd_id
+        self.c_id = c_id
 
 
     # 시간 처리해서 가져오기
+    @staticmethod
     def GetTime(numdays) : # 나오게할 날짜 갯수
         baseDate = datetime.date.today() 
         d_list = [baseDate - datetime.timedelta(days=x) for x in range(numdays)]
@@ -28,6 +29,7 @@ class FindMainNews:
         return date_list 
 
     # 2010년부터 가져오기
+    @staticmethod
     def GetTime_Since2010() : # 나오게할 날짜 갯수
         baseDate = datetime.date(2010, 1, 1)
         d_day = datetime.date.today() - baseDate
@@ -43,6 +45,7 @@ class FindMainNews:
     # 날짜가 포함된 url을 넣어 마지막 페이지 찾기
     # input url 형식
     # url = "https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=20220105&page="
+    @staticmethod
     def FindLastPage(url):
         # 페이지 번호
         pn = 1
@@ -95,11 +98,11 @@ class FindMainNews:
             return pn
                     
 
-    # 링크 타고 들어가기
+    # 링크 타고 들어가 열 링크 리턴
     # input url 형식
     # url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
-    def NewsInsert(url, select, countdays, cat_no):
-        i = 0
+    @staticmethod
+    def NewsInsert(url, select, countdays, sid1):
         inputurl = url
         if select == 1:
             getTime = FindMainNews.GetTime_Since2010()  # 2010년부터 오늘까지 다가져오기
@@ -131,38 +134,16 @@ class FindMainNews:
                             # continue 사용 이유 : href가 없어 예외가 발생된 경우에도 뒤에 있는 하이퍼링크들도 조사를 해야하기 때문에 continue를 사용한다.
                             continue        
                         else:
-                            # 경제만 추출(sid1=101)      => 수정 필요
-                            if link.startswith('https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101') or link.startswith('http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101'):
+                            # 해당 sid만 추출 (sid1=101)     
+                            if link.startswith(f'https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}') or link.startswith(f'http://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1={sid1}'):
                                 links.append(link)
-
-                                # 아래 부분 따로 빼기
-                                try:
-                                    news = FindMainNews.Extract(link, cat_no[5:8], cat_no[14:17])
-
-                                    # 뉴스 세부 내용 저장
-                                    NewsSql.insertNews(news)
-                                    # 뉴스 본문 저장
-                                    NewsSql.insertDescNews(news)
-
-                                    
-                                    print("제목 :", news.title)
-                                    """
-                                    print("내용 :", news.content)
-                                    print("날짜 :", news.time)
-                                    print("원문 링크 :", news.link)
-                                    print("사진 링크 :", news.pic_link)
-                                    print("언론사 :", news.press)
-                                    print("해당 카테고리 : ", cat_no[14:17])
-                                    print("해당 세부 카테고리 : ", cat_no[5:8])
-                                    """
-                                except:
-                                    continue
         return links
 
 
     # 원하는 항목 다 가져오기
     # 완성된 기사 url을 input 사용
-    def Extract(url, p_id, cd_id):
+    @staticmethod
+    def Extract(url, cd_id, c_id):
         try :
             # 기사 가져오기
             res = WebRobot.CollectHtml(url)
@@ -188,7 +169,7 @@ class FindMainNews:
                 # 빈 리스트 생성
                 title =[]
                 content = []
-                time = []
+                time_temp = []
                 link = []
                 pic_link = []
                 press = []
@@ -207,7 +188,24 @@ class FindMainNews:
 
                 # 날짜 추출
                 for tag_time in tags_time:
-                    time.append(tag_time.text.strip())
+                    time_temp.append(tag_time.text.strip())
+
+                # 날짜 오전 오후 처리
+                if time_temp[0][12:14] == "오후":
+                    # 1시부터 9시
+                    if len(time_temp[0]) == 19:
+                        time = time_temp[0][:12] + str(int(time_temp[0][15:16])+12) + time_temp[0][16:]
+                    # 10시부터 12시
+                    elif len(time_temp[0]) == 20:
+                        time = time_temp[0][:12] + str(int(time_temp[0][15:17])+12) + time_temp[0][17:]
+                elif time_temp[0][12:14] == "오전":
+                    # 1시부터 9시
+                    if len(time_temp[0]) == 19:
+                        time = time_temp[0][:12] + time_temp[0][15:]
+                    # 10시부터 12시
+                    elif len(time_temp[0]) == 20:
+                        time = time_temp[0][:12] + time_temp[0][15:]
+
 
                 # 원문 링크 추출
                 link.append(tags_link.strip())
@@ -219,7 +217,17 @@ class FindMainNews:
                 press.append(tags_media.strip())
 
 
-                return FindMainNews(title, content, time, link, pic_link, press, p_id, cd_id)
+                return FindMainNews(title, content, time, link, pic_link, press, cd_id, c_id)
 
         except:
             return False
+
+
+a1 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=277&aid=0005027945", 100,100)
+a2 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=018&aid=0005123091", 100,100)
+a3 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=101&oid=025&aid=0003165201", 100,100)
+a4 = FindMainNews.Extract("https://news.naver.com/main/read.naver?mode=LS2D&mid=shm&sid1=101&sid2=259&oid=277&aid=0005027916", 100,100)
+print("오전1자리",a1.time)
+print("오전2자리",a2.time)
+print("오후1자리",a3.time)
+print("오후2자리",a4.time)

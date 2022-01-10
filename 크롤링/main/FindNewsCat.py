@@ -13,9 +13,12 @@
 # input url = 'https://news.naver.com/main/list.naver?mode=LS2D&sid2=259&sid1=101&mid=shm&date=' 
 
 from CategorySql import CategorySql
+from NewsCatSql import NewsCatSql
 from WebRobot import WebRobot
 
 class FindNewsCat:
+    # 카테고리 찾아 DB에 넣기
+    @staticmethod
     def findNewsCat():
         # cat_name = []
 
@@ -55,11 +58,16 @@ class FindNewsCat:
                 except:
                     break
 
-
+    # url에 카테고리 합치기 
+    @staticmethod
     def catInsert(url):
-        # 경제 카테고리
-        eco_sids = ['sid2=259&sid1=101', 'sid2=258&sid1=101', 'sid2=261&sid1=101', 'sid2=771&sid1=101', 'sid2=260&sid1=101', 'sid2=262&sid1=101', 'sid2=310&sid1=101', 'sid2=263&sid1=101']
+        # 모든 카테고리
+        # sids = ['sid2=259&sid1=101', 'sid2=258&sid1=101', ...]
+        sids = []
+        cat = NewsCatSql.findnidNumber()
+        for i in range(len(cat)):
+            sids.append('sid2='+str(cat[i][0])+'&sid1='+str(cat[i][1]))
         sidurls = []
-        for n in range(len(eco_sids)):
-            sidurls.append(url+eco_sids[n]+'&mid=shm&date=')
-        return sidurls, eco_sids    # 카테고리 주소와 카테고리 번호 리턴
+        for n in range(len(sids)):
+            sidurls.append(url+sids[n]+'&mid=shm&date=')
+        return sidurls, sids    # 카테고리가 포함된 주소와 카테고리 번호 리턴

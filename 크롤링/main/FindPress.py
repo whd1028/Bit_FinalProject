@@ -11,6 +11,7 @@ class FindPress:
         self.press_num = press_num
         self.press_name = press_name
 
+    @staticmethod
     def findPress():
         # 기사 가져오기
         res = WebRobot.CollectHtml("https://news.naver.com/main/officeList.naver")

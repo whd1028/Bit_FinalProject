@@ -3,6 +3,7 @@
 from SqlCon import SqlCon
 
 class PressSql:
+    @staticmethod
     def insertPress(press):
         try:
             for i in range(len(press.press_num)):
@@ -19,6 +20,7 @@ class PressSql:
         else:
             True
 
+    @staticmethod
     def findPressNumber(news):
         cursor = SqlCon.Cursor()
         query = str.format("select p_id from Press where (p_name='{0}')", news.press)

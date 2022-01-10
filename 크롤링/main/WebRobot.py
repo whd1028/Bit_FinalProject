@@ -20,7 +20,7 @@ class WebRobot:
         else : 
             if response.getcode() != 200:   # 요쳥 결과 값이 성공이 아닐 때
                 return None
-            return response                 # 요청 성고하였을 때
+            return response                 # 요청 성공하였을 때
 
     # html 웹페이지 수집 메소드
     # url : 수집할 웹페이지 주소
