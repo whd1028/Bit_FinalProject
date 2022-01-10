@@ -33,7 +33,6 @@ class NewsExtract():
                 title = tags_title[0].text.strip()
 
                 # 내용 추출
-                #print(tags_content[0].text)
                 temp_content = tags_content[0].text
                 temp_content = temp_content.replace("\xa0", " ")
                 temp_content = temp_content.replace("\n", "")
@@ -41,8 +40,7 @@ class NewsExtract():
                 temp_content = temp_content.replace("\'", "\\\'")
                 temp_content = temp_content.replace("\"", "\\\"")
                 content = temp_content.strip()
-                print(content)
-
+                
                 # 날짜 추출
                 time_temp = tags_time[0].text.strip()
 

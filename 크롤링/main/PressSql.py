@@ -21,6 +21,20 @@ class PressSql:
             True
 
     @staticmethod
+    def insertOnePress(news):
+        cursor = SqlCon.Cursor()
+        query = str.format("insert into Press (p_id, p_name) values({0}, '{1}')", news.press_num, news.press_name)
+
+        try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
+            cursor.execute(query)
+            SqlCon.Commit()
+
+        except:
+            False
+        else:
+            True
+
+    @staticmethod
     def findPressNumber(news):
         cursor = SqlCon.Cursor()
         query = str.format("select p_id from Press where (p_name='{0}')", news.press)

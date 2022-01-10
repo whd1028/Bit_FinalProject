@@ -12,9 +12,9 @@ class NewsSql:
     def insertNews(news):
         cursor = SqlCon.Cursor()
         # 없는 언론사일 수 있으니 insert
-        PressSql.insertPress(news)
+        PressSql.insertOnePress(news)
         # 언론사 번호를 어떻게 넣냐
-        query = str.format("insert into News (p_id, cd_id, n_title, nd_img, n_input, o_link) values({0}, {1}, '{2}', '{3}', '{4}', '{5}')", news.press_no, news.cd_id, news.title, news.pic_link, news.time, news.link)
+        query = str.format("insert into News (p_id, cd_id, n_title, nd_img, n_input, o_link) values({0}, {1}, '{2}', '{3}', '{4}', '{5}')", news.press_num, news.cd_id, news.title, news.pic_link, news.time, news.link)
 
         try:    # 같은 url을 수집할 경우 예외가 발생할 수 있다.
             cursor.execute(query)
